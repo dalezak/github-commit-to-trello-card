@@ -8757,7 +8757,11 @@ async function getListOnBoard(board, list) {
     }
   });
   console.log(url, res.data);
-  return res && res.data ? res.data.find(l => l.closed == false && l.name == list) : null;
+  if (res && res.data) {
+    let result = res.data.find(l => l.closed == false && l.name == list);
+    return result ? result.id : null;
+  }
+  return null;
 }
 
 async function addCommentToCard(card, author, message, link) {
