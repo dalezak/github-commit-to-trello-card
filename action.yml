@@ -12,7 +12,7 @@ inputs:
     description: Trello board ID, visit a board then append .json to url
     required: true
   trello-card-action:
-    description: Trello card action, either "comment" or "attachment"
+    description: Trello card action, either "Comment" or "Attachment"
     required: true  
   trello-list-name-commit:
     description: Trello list name for commit, for example "Doing", "In Progress", etc
