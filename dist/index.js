@@ -9955,7 +9955,7 @@ async function run() {
   if (_actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit) {
     console.log("github.context.payload.head_commit",_actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit);
     console.log("github.context.payload.head_commit.author", _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.author);
-    console.log("github.context.payload.head_commit.committer", _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.committer);
+    let author = _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.author.name;
     let message = _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.message;
     let url = _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.url;
     if (message && message.length > 0) {
@@ -9964,7 +9964,7 @@ async function run() {
         for (let id of ids) {
           let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
           if (cardId && cardId.length > 0) {
-            let comment = `${message} ${url}`;
+            let comment = `${author}: ${message} ${url}`;
             await postCommentToCard(cardId, comment);
           }
         }
