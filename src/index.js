@@ -8,10 +8,11 @@ const { pull_request, head_commit } = context.payload;
 const trelloKey = core.getInput('trello-key', { required: true });
 const trelloToken = core.getInput('trello-token', { required: true });
 const trelloBoard = core.getInput('trello-board', { required: true });
-const trelloAction = core.getInput('trello-action', { required: true });
+const trelloCardAction = core.getInput('trello-card-action', { required: true });
+const trelloListName = core.getInput('trello-list-name', { required: true });
 
-async function getCardOnBoard(board, id) {
-  let url = `https://trello.com/1/boards/${board}/cards/${id}`
+async function getCardOnBoard(board, card) {
+  let url = `https://trello.com/1/boards/${board}/cards/${card}`
   let res = await axios.get(url, { 
     params: { 
       key: trelloKey, 
@@ -19,6 +20,17 @@ async function getCardOnBoard(board, id) {
     }
   });
   return res && res.data ? res.data.id : null;
+}
+
+async function getListOnBoard(board, list) {
+  let url = `https://trello.com/1/boards/${board}/lists`
+  let res = await axios.get(url, { 
+    params: { 
+      key: trelloKey, 
+      token: trelloToken 
+    }
+  });
+  return res && res.data ? res.data.filter(l => l.closed == false && l.name == list)  : null;
 }
 
 async function addCommentToCard(card, author, message, link) {
@@ -62,12 +74,16 @@ async function run() {
       for (let id of ids) {
         let card = await getCardOnBoard(trelloBoard, id.replace('#', ''));
         if (card && card.length > 0) {
-          if (trelloAction == 'comment') {
+          if (trelloCardAction == 'comment') {
             await addCommentToCard(card, author, message, url);
           }
-          else if (trelloAction == 'attachment') {
+          else if (trelloCardAction == 'attachment') {
             await addAttachmentToCard(card, url);
-          }  
+          }
+          let list = await getListOnBoard(trelloBoard, trelloListName);
+          if (list && list.length > 0) {
+            await moveCardToList(card, list);
+          }
         }
       }
     }

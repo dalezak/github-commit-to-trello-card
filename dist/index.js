@@ -8731,10 +8731,11 @@ const { pull_request, head_commit } = context.payload;
 const trelloKey = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-key', { required: true });
 const trelloToken = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-token', { required: true });
 const trelloBoard = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-board', { required: true });
-const trelloAction = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-action', { required: true });
+const trelloCardAction = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-card-action', { required: true });
+const trelloListName = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-list-name', { required: true });
 
-async function getCardOnBoard(board, id) {
-  let url = `https://trello.com/1/boards/${board}/cards/${id}`
+async function getCardOnBoard(board, card) {
+  let url = `https://trello.com/1/boards/${board}/cards/${card}`
   let res = await axios__WEBPACK_IMPORTED_MODULE_0__.get(url, { 
     params: { 
       key: trelloKey, 
@@ -8742,6 +8743,17 @@ async function getCardOnBoard(board, id) {
     }
   });
   return res && res.data ? res.data.id : null;
+}
+
+async function getListOnBoard(board, list) {
+  let url = `https://trello.com/1/boards/${board}/lists`
+  let res = await axios__WEBPACK_IMPORTED_MODULE_0__.get(url, { 
+    params: { 
+      key: trelloKey, 
+      token: trelloToken 
+    }
+  });
+  return res && res.data ? res.data.filter(l => l.closed == false && l.name == list)  : null;
 }
 
 async function addCommentToCard(card, author, message, link) {
@@ -8766,7 +8778,7 @@ async function addAttachmentToCard(card, link) {
 
 async function moveCardToList(card, list) {
   let url = `https://api.trello.com/1/cards/${card}`;
-  let res = await axios.put(url, {
+  let res = await axios__WEBPACK_IMPORTED_MODULE_0__.put(url, {
     key: trelloKey,
     token: trelloToken, 
     idList: list
@@ -8785,12 +8797,16 @@ async function run() {
       for (let id of ids) {
         let card = await getCardOnBoard(trelloBoard, id.replace('#', ''));
         if (card && card.length > 0) {
-          if (trelloAction == 'comment') {
+          if (trelloCardAction == 'comment') {
             await addCommentToCard(card, author, message, url);
           }
-          else if (trelloAction == 'attachment') {
+          else if (trelloCardAction == 'attachment') {
             await addAttachmentToCard(card, url);
-          }  
+          }
+          let list = await getListOnBoard(trelloBoard, trelloListName);
+          if (list && list.length > 0) {
+            await moveCardToList(card, list);
+          }
         }
       }
     }
