@@ -20,7 +20,7 @@ async function getCardOnBoard(board, card) {
       token: trelloAuthToken 
     }
   });
-  console.log(url, res);
+  console.log(url, res.data);
   return res && res.data ? res.data.id : null;
 }
 
@@ -33,7 +33,7 @@ async function getListOnBoard(board, list) {
       token: trelloAuthToken 
     }
   });
-  console.log(url, res);
+  console.log(url, res.data);
   return res && res.data ? res.data.filter(l => l.closed == false && l.name == list)  : null;
 }
 
@@ -45,7 +45,7 @@ async function addCommentToCard(card, author, message, link) {
     token: trelloAuthToken, 
     text: `${author}: ${message} ${link}`
   });
-  console.log(url, res);
+  console.log(url, res.data);
   return res && res.status == 200;
 }
 
@@ -57,7 +57,7 @@ async function addAttachmentToCard(card, link) {
     token: trelloAuthToken, 
     url: link
   });
-  console.log(url, res);
+  console.log(url, res.data);
   return res && res.status == 200;
 }
 
@@ -69,7 +69,7 @@ async function moveCardToList(card, list) {
     token: trelloAuthToken, 
     idList: list
   });
-  console.log(url, res);
+  console.log(url, res.data);
   return res && res.status == 200;
 }
 
