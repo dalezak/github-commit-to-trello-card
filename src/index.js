@@ -34,7 +34,7 @@ async function getListOnBoard(board, list) {
     }
   });
   console.log(url, res.data);
-  return res && res.data ? res.data.filter(l => l.closed == false && l.name == list)  : null;
+  return res && res.data ? res.data.find(l => l.closed == false && l.name == list) : null;
 }
 
 async function addCommentToCard(card, author, message, link) {
