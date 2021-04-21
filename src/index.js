@@ -1,6 +1,5 @@
 import * as axios from 'axios';
 import * as core from '@actions/core';
-import * as exec from '@actions/exec';
 import * as github from '@actions/github';
 
 const { context = {} } = github;
@@ -33,24 +32,23 @@ async function postCommentToCard(id, comment) {
 
 async function run() {
   console.log("github.context", github.context);
-  if (github.context.payload.head_commit) {
-    console.log("github.context.payload.head_commit",github.context.payload.head_commit);
-    console.log("github.context.payload.head_commit.author", github.context.payload.head_commit.author);
-    let author = github.context.payload.head_commit.author.name;
-    let message = github.context.payload.head_commit.message;
-    let url = github.context.payload.head_commit.url;
-    if (message && message.length > 0) {
-      let ids = message.match(/\#\d+/g);
-      if (ids && ids.length > 0) {
-        for (let id of ids) {
-          let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
-          if (cardId && cardId.length > 0) {
-            let comment = `${author}: ${message} ${url}`;
-            await postCommentToCard(cardId, comment);
-          }
+  if (head_commit && head_commit.message) {
+    let url = head_commit.url;
+    let author = head_commit.author.name;
+    let message = head_commit.message;
+    let ids = message.match(/\#\d+/g);
+    if (ids && ids.length > 0) {
+      for (let id of ids) {
+        let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
+        if (cardId && cardId.length > 0) {
+          let comment = `${author}: ${message} ${url}`;
+          await postCommentToCard(cardId, comment);
         }
       }
     }
+  }
+  else if (pull_request) {
+  
   }
 };
 
