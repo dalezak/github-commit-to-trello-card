@@ -8754,7 +8754,7 @@ async function addCommentToCard(id, comment) {
 }
 
 async function addAttachmentToCard(id, attachment) {
-  let url = `https://api.trello.com/1/cards/${id}/actions/attachments`;
+  let url = `https://api.trello.com/1/cards/${id}/attachments`;
   let res = await axios__WEBPACK_IMPORTED_MODULE_0__.post(url, {
     key: trelloKey,
     token: trelloToken, 
