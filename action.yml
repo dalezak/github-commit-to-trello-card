@@ -1,6 +1,9 @@
 name: github-commit-to-trello-card
 description: GitHub Action to attach GitHub commits and pull requests to a Trello card
 author: Dale Zak
+branding:
+  icon: 'check-square'  
+  color: 'blue'
 inputs:
   trello-api-key:
     description: Trello API key, visit https://trello.com/app-key
