@@ -9922,6 +9922,9 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 
+const { context = {} } = _actions_github__WEBPACK_IMPORTED_MODULE_3__;
+const { pull_request, head_commit } = context.payload;
+
 const trelloKey = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-key', { required: true });
 const trelloToken = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-token', { required: true });
 const trelloBoard = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-board', { required: true });
@@ -9948,17 +9951,22 @@ async function postCommentToCard(id, comment) {
 }
 
 async function run() {
-  console.log("github.event", _actions_github__WEBPACK_IMPORTED_MODULE_3__.event);
   console.log("github.context", _actions_github__WEBPACK_IMPORTED_MODULE_3__.context);
-  let message = _actions_github__WEBPACK_IMPORTED_MODULE_3__.event.head_commit.message;
-  if (message && message.length > 0) {
-    let ids = message.match(/\#\d+/g);
-    if (ids && ids.length > 0) {
-      for (let id of ids) {
-        let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
-        if (cardId && cardId.length > 0) {
-          let comment = `${message} `;
-          await postCommentToCard(cardId, comment);
+  if (_actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit) {
+    console.log("github.context.payload.head_commit",_actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit);
+    console.log("github.context.payload.head_commit.author", _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.author);
+    console.log("github.context.payload.head_commit.committer", _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.committer);
+    let message = _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.message;
+    let url = _actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.head_commit.url;
+    if (message && message.length > 0) {
+      let ids = message.match(/\#\d+/g);
+      if (ids && ids.length > 0) {
+        for (let id of ids) {
+          let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
+          if (cardId && cardId.length > 0) {
+            let comment = `${message} ${url}`;
+            await postCommentToCard(cardId, comment);
+          }
         }
       }
     }

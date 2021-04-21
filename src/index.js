@@ -3,6 +3,9 @@ import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as github from '@actions/github';
 
+const { context = {} } = github;
+const { pull_request, head_commit } = context.payload;
+
 const trelloKey = core.getInput('trello-key', { required: true });
 const trelloToken = core.getInput('trello-token', { required: true });
 const trelloBoard = core.getInput('trello-board', { required: true });
@@ -29,17 +32,22 @@ async function postCommentToCard(id, comment) {
 }
 
 async function run() {
-  console.log("github.event", github.event);
   console.log("github.context", github.context);
-  let message = github.event.head_commit.message;
-  if (message && message.length > 0) {
-    let ids = message.match(/\#\d+/g);
-    if (ids && ids.length > 0) {
-      for (let id of ids) {
-        let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
-        if (cardId && cardId.length > 0) {
-          let comment = `${message} `;
-          await postCommentToCard(cardId, comment);
+  if (github.context.payload.head_commit) {
+    console.log("github.context.payload.head_commit",github.context.payload.head_commit);
+    console.log("github.context.payload.head_commit.author", github.context.payload.head_commit.author);
+    console.log("github.context.payload.head_commit.committer", github.context.payload.head_commit.committer);
+    let message = github.context.payload.head_commit.message;
+    let url = github.context.payload.head_commit.url;
+    if (message && message.length > 0) {
+      let ids = message.match(/\#\d+/g);
+      if (ids && ids.length > 0) {
+        for (let id of ids) {
+          let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
+          if (cardId && cardId.length > 0) {
+            let comment = `${message} ${url}`;
+            await postCommentToCard(cardId, comment);
+          }
         }
       }
     }
