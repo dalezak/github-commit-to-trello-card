@@ -4,8 +4,9 @@
 #### Action Variables
 - **trello-key** - Trello API Key
 - **trello-token** - Trello OAuth Token
-- **trello-board** - Trello Board ID
-- **trello-action** - Trello Card Action, either "comment" or "attachment"
+- **trello-board-id** - Trello Board ID
+- **trello-card-action** - Trello Card Action, either "comment" or "attachment"
+- **trello-list-name** - Trello List Name, example "Doing"
 
 #### GitHub Action
 ```
@@ -26,8 +27,9 @@ jobs:
         with:
           trello-key: ${{ secrets.TRELLO_KEY }}
           trello-token: ${{ secrets.TRELLO_TOKEN }}
-          trello-board: ${{ secrets.TRELLO_BOARD }}
-          trello-action: "attachment"
+          trello-board-id: ${{ secrets.TRELLO_BOARD }}
+          trello-list-name: "Doing"
+          trello-card-action: "attachment"
 ```          
 
 #### Build Project

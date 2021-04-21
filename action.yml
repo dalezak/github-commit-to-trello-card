@@ -8,14 +8,14 @@ inputs:
   trello-token:
     description: Trello OAuth Token
     required: true
-  trello-board:
+  trello-board-id:
     description: Trello Board ID
     required: true
+  trello-list-name:
+    description: Trello List Name, example "Doing"
+    required: true  
   trello-card-action:
     description: Trello Card Action, either "comment" or "attachment"
-    required: true  
-  trello-list-name:
-    description: Trello List Name
     required: true  
 runs:
   using: node12
