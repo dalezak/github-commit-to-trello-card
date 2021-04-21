@@ -9,7 +9,7 @@ const trelloKey = core.getInput('trello-key', { required: true });
 const trelloToken = core.getInput('trello-token', { required: true });
 const trelloBoard = core.getInput('trello-board', { required: true });
 
-async function getCardIdFromShortLink(board, id) {
+async function getCardId(board, id) {
   let url = `https://trello.com/1/boards/${board}/cards/${id}`
   let res = await axios.get(url, { 
     params: { 
@@ -20,12 +20,22 @@ async function getCardIdFromShortLink(board, id) {
   return res && res.data ? res.data.id : null;
 }
 
-async function postCommentToCard(id, comment) {
+async function addCommentToCard(id, comment) {
   let url = `https://api.trello.com/1/cards/${id}/actions/comments`;
   let res = await axios.post(url, {
     key: trelloKey,
     token: trelloToken, 
     text: comment
+  });
+  return res && res.status == 200;
+}
+
+async function addAttachmentToCard(id, attachment) {
+  let url = `https://api.trello.com/1/cards/${id}/actions/attachments`;
+  let res = await axios.post(url, {
+    key: trelloKey,
+    token: trelloToken, 
+    url: attachment
   });
   return res && res.status == 200;
 }
@@ -39,10 +49,10 @@ async function run() {
     let ids = message.match(/\#\d+/g);
     if (ids && ids.length > 0) {
       for (let id of ids) {
-        let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
+        let cardId = await getCardId(trelloBoard, id.replace('#', ''));
         if (cardId && cardId.length > 0) {
-          let comment = `${author}: ${message} ${url}`;
-          await postCommentToCard(cardId, comment);
+          await addCommentToCard(cardId, `${author}: ${message} ${url}`);
+          await addAttachmentToCard(cardId, url);
         }
       }
     }

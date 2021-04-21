@@ -8732,7 +8732,7 @@ const trelloKey = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-ke
 const trelloToken = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-token', { required: true });
 const trelloBoard = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('trello-board', { required: true });
 
-async function getCardIdFromShortLink(board, id) {
+async function getCardId(board, id) {
   let url = `https://trello.com/1/boards/${board}/cards/${id}`
   let res = await axios__WEBPACK_IMPORTED_MODULE_0__.get(url, { 
     params: { 
@@ -8743,12 +8743,22 @@ async function getCardIdFromShortLink(board, id) {
   return res && res.data ? res.data.id : null;
 }
 
-async function postCommentToCard(id, comment) {
+async function addCommentToCard(id, comment) {
   let url = `https://api.trello.com/1/cards/${id}/actions/comments`;
   let res = await axios__WEBPACK_IMPORTED_MODULE_0__.post(url, {
     key: trelloKey,
     token: trelloToken, 
     text: comment
+  });
+  return res && res.status == 200;
+}
+
+async function addAttachmentToCard(id, attachment) {
+  let url = `https://api.trello.com/1/cards/${id}/actions/attachments`;
+  let res = await axios__WEBPACK_IMPORTED_MODULE_0__.post(url, {
+    key: trelloKey,
+    token: trelloToken, 
+    url: attachment
   });
   return res && res.status == 200;
 }
@@ -8762,10 +8772,10 @@ async function run() {
     let ids = message.match(/\#\d+/g);
     if (ids && ids.length > 0) {
       for (let id of ids) {
-        let cardId = await getCardIdFromShortLink(trelloBoard, id.replace('#', ''));
+        let cardId = await getCardId(trelloBoard, id.replace('#', ''));
         if (cardId && cardId.length > 0) {
-          let comment = `${author}: ${message} ${url}`;
-          await postCommentToCard(cardId, comment);
+          await addCommentToCard(cardId, `${author}: ${message} ${url}`);
+          await addAttachmentToCard(cardId, url);
         }
       }
     }
