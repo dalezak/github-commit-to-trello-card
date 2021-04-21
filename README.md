@@ -5,7 +5,7 @@
 - **trello-key** - Trello API Key
 - **trello-token** - Trello OAuth Token
 - **trello-board** - Trello Board ID
-- **trello-action** - Trello Action Type, either "comment" or "attachment"
+- **trello-action** - Trello Card Action, either "comment" or "attachment"
 
 #### GitHub Action
 ```

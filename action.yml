@@ -12,7 +12,7 @@ inputs:
     description: Trello Board ID
     required: true
   trello-action:
-    description: Trello Action Type, either "comment" or "attachment"
+    description: Trello Card Action, either "comment" or "attachment"
     required: true  
 runs:
   using: node12

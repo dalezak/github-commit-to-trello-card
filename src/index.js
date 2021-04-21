@@ -41,6 +41,16 @@ async function addAttachmentToCard(card, link) {
   return res && res.status == 200;
 }
 
+async function moveCardToList(card, list) {
+  let url = `https://api.trello.com/1/cards/${card}`;
+  let res = await axios.put(url, {
+    key: trelloKey,
+    token: trelloToken, 
+    idList: list
+  });
+  return res && res.status == 200;
+}
+
 async function run() {
   console.log("github.context", github.context);
   if (head_commit && head_commit.message) {
@@ -57,7 +67,7 @@ async function run() {
           }
           else if (trelloAction == 'attachment') {
             await addAttachmentToCard(card, url);
-          }
+          }  
         }
       }
     }
