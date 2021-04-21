@@ -8801,8 +8801,8 @@ async function moveCardToList(card, list) {
 }
 
 async function run() {
-  // console.log("github.context", github.context);
   if (head_commit && head_commit.message) {
+    console.log("head_commit", head_commit);
     let url = head_commit.url;
     let message = head_commit.message;
     let author = head_commit.author.name;
@@ -8829,6 +8829,7 @@ async function run() {
   }
   else if (pull_request) {
     // TODO implement handling of PR to move card between lists
+    console.log("pull_request", pull_request);
   }
 };
 
