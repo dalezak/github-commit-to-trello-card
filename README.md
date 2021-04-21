@@ -7,7 +7,7 @@
 - **trello-board** - Trello Board ID
 - **trello-action** - Trello Action Type, either "comment" or "attachment"
 
-#### Sample GitHub Action
+#### GitHub Action
 ```
 name: GitHub Commit To Trello Comment
 
@@ -29,3 +29,8 @@ jobs:
           trello-board: ${{ secrets.TRELLO_BOARD }}
           trello-action: "attachment"
 ```          
+
+#### Build Project
+```
+npm run build
+```

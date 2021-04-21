@@ -1,5 +1,5 @@
-name: github-commit-to-trello-comment
-description: GitHub Action to attach GitHub commits and pull requests as a comment in a Trello card
+name: github-commit-to-trello-card
+description: GitHub Action to attach GitHub commits and pull requests to a Trello card
 author: Dale Zak
 inputs:
   trello-key:
@@ -11,6 +11,9 @@ inputs:
   trello-board:
     description: Trello Board ID
     required: true
+  trello-action:
+    description: Trello Action Type, either "comment" or "attachment"
+    required: true  
 runs:
   using: node12
   main: dist/index.js

@@ -1,7 +1,7 @@
 {
-  "name": "github-commit-to-trello-comment",
+  "name": "github-commit-to-trello-card",
   "version": "1.0.0",
-  "description": "GitHub Action to attach GitHub commits and pull requests as a comment in a Trello card",
+  "description": "GitHub Action to attach GitHub commits and pull requests to a Trello card",
   "main": "index.js",
   "scripts": {
     "build": "ncc build src/index.js -o dist",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dalezak/github-commit-to-trello-comment.git"
+    "url": "git+https://github.com/dalezak/github-commit-to-trello-card.git"
   },
   "keywords": [
     "GitHub",
@@ -19,9 +19,9 @@
   "author": "Dale Zak",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dalezak/github-commit-to-trello-comment/issues"
+    "url": "https://github.com/dalezak/github-commit-to-trello-card/issues"
   },
-  "homepage": "https://github.com/dalezak/github-commit-to-trello-comment#readme",
+  "homepage": "https://github.com/dalezak/github-commit-to-trello-card#readme",
   "dependencies": {
     "@actions/core": "^1.2.7",
     "@actions/github": "^4.0.0",
