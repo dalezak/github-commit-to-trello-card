@@ -90,18 +90,20 @@ async function handleHeadCommit(data) {
   let author = data.author.name;
   let ids = message.match(/\#\d+/g);
   if (ids && ids.length > 0) {
-    for (let id of ids) {
-      let card = await getCardOnBoard(trelloBoardId, id.replace('#', ''));
-      if (card && card.length > 0) {
-        if (trelloCardAction == 'attachment') {
-          await addAttachmentToCard(card, url);
-        }
-        else if (trelloCardAction == 'comment') {
-          await addCommentToCard(card, author, message, url);
-        }
-        if (trelloListNameCommit && trelloListNameCommit.length > 0) {
-          await moveCardToList(trelloBoardId, card, trelloListNameCommit);
-        }
+    let id = ids[ids.length-1];
+    let card = await getCardOnBoard(trelloBoardId, id.replace('#', ''));
+    if (card && card.length > 0) {
+      if (trelloCardAction == 'attachment') {
+        await addAttachmentToCard(card, url);
+      }
+      else if (trelloCardAction == 'comment') {
+        await addCommentToCard(card, author, message, url);
+      }
+      if (message.match(/Merge pull request \#\d+ from/g)) {
+        await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
+      }
+      else if (trelloListNameCommit && trelloListNameCommit.length > 0) {
+        await moveCardToList(trelloBoardId, card, trelloListNameCommit);
       }
     }
   }
