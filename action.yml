@@ -3,20 +3,26 @@ description: GitHub Action to attach GitHub commits and pull requests to a Trell
 author: Dale Zak
 inputs:
   trello-api-key:
-    description: Trello API Key
+    description: Trello API key, visit https://trello.com/app-key
     required: true
   trello-auth-token:
-    description: Trello OAuth Token
+    description: Trello auth token, visit https://trello.com/app-key then click generate a token
     required: true
   trello-board-id:
-    description: Trello Board ID
+    description: Trello board ID, visit a board then append .json to url
     required: true
-  trello-list-name:
-    description: Trello List Name, example "Doing"
-    required: true  
   trello-card-action:
-    description: Trello Card Action, either "comment" or "attachment"
+    description: Trello card action, either "comment" or "attachment"
     required: true  
+  trello-list-name-commit:
+    description: Trello list name for commit, for example "Doing", "In Progress", etc
+    required: true 
+  trello-list-name-pr-open:
+    description: Trello list name for open pull request, for example "Reviewing", "In Review", etc
+    required: false 
+  trello-list-name-pr-closed:
+    description: Trello list name for closed pull request, for example "Testing", "Done", etc
+    required: false  
 runs:
   using: node12
   main: dist/index.js
