@@ -5,7 +5,7 @@
 - **trello-key** - Trello API Key
 - **trello-token** - Trello OAuth Token
 - **trello-board** - Trello Board ID
-- **trello-commit** - Trello Commit Action, either "comment" or "attachment"
+- **trello-action** - Trello Action Type, either "comment" or "attachment"
 
 #### Sample GitHub Action
 ```
@@ -27,5 +27,5 @@ jobs:
           trello-key: ${{ secrets.TRELLO_KEY }}
           trello-token: ${{ secrets.TRELLO_TOKEN }}
           trello-board: ${{ secrets.TRELLO_BOARD }}
-          trello-commit: "attachment"
+          trello-action: "attachment"
 ```          
