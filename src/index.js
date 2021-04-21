@@ -8,6 +8,7 @@ const { pull_request, head_commit } = context.payload;
 const trelloKey = core.getInput('trello-key', { required: true });
 const trelloToken = core.getInput('trello-token', { required: true });
 const trelloBoard = core.getInput('trello-board', { required: true });
+const trelloCommit = core.getInput('trello-commit', { required: true });
 
 async function getCardId(board, id) {
   let url = `https://trello.com/1/boards/${board}/cards/${id}`
@@ -51,14 +52,18 @@ async function run() {
       for (let id of ids) {
         let cardId = await getCardId(trelloBoard, id.replace('#', ''));
         if (cardId && cardId.length > 0) {
-          await addCommentToCard(cardId, `${author}: ${message} ${url}`);
-          await addAttachmentToCard(cardId, url);
+          if (trelloCommit == 'comment') {
+            await addCommentToCard(cardId, `${author}: ${message} ${url}`);
+          }
+          else if (trelloCommit == 'attachment') {
+            await addAttachmentToCard(cardId, url);
+          }
         }
       }
     }
   }
   else if (pull_request) {
-  
+    // TODO implement handling of PR to move card between lists
   }
 };
 
