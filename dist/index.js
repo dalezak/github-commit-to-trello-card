@@ -8748,7 +8748,7 @@ async function getCardOnBoard(board, card) {
     console.log(url, response.data);
     return response.data.id;
   }).catch(error => {
-    console.error(url, error);
+    console.error(url, error.response);
     return null;
   });
 }
@@ -8766,7 +8766,7 @@ async function getListOnBoard(board, list) {
     let result = response.data.find(l => l.closed == false && l.name == list);
     return result ? result.id : null;
   }).catch(error => {
-    console.error(url, error);
+    console.error(url, error.response);
     return null;
   });
 }
@@ -8782,7 +8782,7 @@ async function addAttachmentToCard(card, link) {
     console.log(url, response.data); 
     return response.status == 200;
   }).catch(error => {
-    console.error(url, error);
+    console.error(url, error.response);
     return null;
   });
 }
@@ -8798,7 +8798,7 @@ async function addCommentToCard(card, user, message, link) {
     console.log(url, response.data); 
     return response.status == 200;
   }).catch(error => {
-    console.error(url, error);
+    console.error(url, error.response);
     return null;
   });
 }
@@ -8816,7 +8816,7 @@ async function moveCardToList(board, card, list) {
       console.log(url, response.data);
       return response.status == 200;
     }).catch(error => {
-      console.error(url, error);
+      console.error(url, error.response);
       return null;
     });
   }       
