@@ -1,16 +1,23 @@
 # GitHub-Commit-To-Trello-Card
-### GitHub Action to attach GitHub commits to a Trello card
+### GitHub Action to attach GitHub commits and pull requests to a Trello card
 
 #### Action Variables
-- **trello-api-key** - Trello API key, visit https://trello.com/app-key
+- **trello-api-key** - Trello API key, visit https://trello.com/app-key for key
 - **trello-auth-token** - Trello auth token, visit https://trello.com/app-key then click generate a token
-- **trello-board-id** - Trello board ID, visit a board then append .json to url
+- **trello-board-id** - Trello board ID, visit a board then append .json to url to find id
 - **trello-card-action** - Trello card action, either "Comment" or "Attachment"
 - **trello-list-name-commit** - Trello list name for commit, for example "Doing", "In Progress", etc
 - **trello-list-name-pr-open** - Trello list name for open pull request, for example "Reviewing", "In Review", etc
 - **trello-list-name-pr-closed** - Trello list name for closed pull request, for example "Testing", "Done", etc
 
-#### GitHub Actions
+#### Git Commit
+```
+git add .
+git commit -m "Add this commit to Trello card #123"
+git push
+```
+
+#### GitHub Action
 ```
 name: GitHub Commit To Trello Comment
 
