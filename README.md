@@ -6,7 +6,7 @@
 - **trello-auth-token** - Trello auth token, visit https://trello.com/app-key then click generate a token
 - **trello-board-id** - Trello board ID, visit a board then append .json to url to find id
 - **trello-card-action** - Trello card action, either "Comment" or "Attachment"
-- **trello-list-name-commit** - Trello list name for commit, for example "Doing", "In Progress", etc
+- **trello-list-name-commit** - Trello list name for new commit, for example "Doing", "In Progress", etc
 - **trello-list-name-pr-open** - Trello list name for open pull request, for example "Reviewing", "In Review", etc
 - **trello-list-name-pr-closed** - Trello list name for closed pull request, for example "Testing", "Done", etc
 

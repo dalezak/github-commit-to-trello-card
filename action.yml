@@ -18,7 +18,7 @@ inputs:
     description: Trello card action, either "Comment" or "Attachment"
     required: true  
   trello-list-name-commit:
-    description: Trello list name for commit, for example "Doing", "In Progress", etc
+    description: Trello list name for new commit, for example "Doing", "In Progress", etc
     required: true 
   trello-list-name-pr-open:
     description: Trello list name for open pull request, for example "Reviewing", "In Review", etc
