@@ -8856,7 +8856,7 @@ async function handlePullRequest(data) {
   let url = data.url;
   let message = data.title;
   let user = data.user.name;
-  let card = await getCardOnBoard(trelloBoardId, title);
+  let card = await getCardOnBoard(trelloBoardId, message);
   if (card && card.length > 0) {
     if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
       await addAttachmentToCard(card, url);
