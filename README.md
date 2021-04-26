@@ -40,3 +40,14 @@ jobs:
           trello-list-name-pr-open: "Reviewing"
           trello-list-name-pr-closed: "Testing"
 ```          
+
+#### Local Build
+```
+npm run build
+```
+
+#### Release Build
+```
+git tag -a "v2" -m "v2"
+git push origin --tags
+```

@@ -1,6 +1,6 @@
+author: Dale Zak
 name: github-commit-to-trello-card
 description: GitHub Action to attach GitHub commits and pull requests to a Trello card
-author: Dale Zak
 branding:
   icon: 'check-square'  
   color: 'gray-dark'
