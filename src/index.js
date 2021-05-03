@@ -130,7 +130,7 @@ async function handleHeadCommit(data) {
 
 async function handlePullRequest(data) {
   console.log("handlePullRequest", data);
-  let url = data.url;
+  let url = data.html_url || data.url;
   let message = data.title;
   let user = data.user.name;
   let card = await getCardOnBoard(trelloBoardId, message);

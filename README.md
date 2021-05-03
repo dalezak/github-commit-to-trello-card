@@ -1,6 +1,9 @@
 # GitHub-Commit-To-Trello-Card
 ### GitHub Action to attach GitHub commits and pull requests to a Trello card
 
+#### Action Marketplace
+[https://github.com/marketplace/actions/github-commit-to-trello-card](https://github.com/marketplace/actions/github-commit-to-trello-card)
+
 #### Action Variables
 - **trello-api-key** - Trello API key, visit https://trello.com/app-key for key
 - **trello-auth-token** - Trello auth token, visit https://trello.com/app-key then click generate a token
