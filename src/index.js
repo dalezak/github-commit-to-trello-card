@@ -5,7 +5,9 @@ import * as github from '@actions/github';
 const { context = {} } = github;
 const { pull_request, head_commit } = context.payload;
 
-const regexPullRequest = /Merge pull request \#\d+ from/g;
+const regexPullRequest = /Merge pull request \#\d+ from [\w\-]*\//g;
+const regexPRNamingFormat1 = /\#\d+/g; // e.g. Code change #1000
+const regexPRNamingFormat2 = /^\d+/g; // e.g. 1000-code-change (Trello card URI)
 const trelloApiKey = core.getInput('trello-api-key', { required: true });
 const trelloAuthToken = core.getInput('trello-auth-token', { required: true });
 const trelloBoardId = core.getInput('trello-board-id', { required: true });
@@ -16,8 +18,15 @@ const trelloListNamePullRequestClosed = core.getInput('trello-list-name-pr-close
 
 function getCardNumber(message) {
   console.log(`getCardNumber(${message})`);
-  let ids = message && message.length > 0 ? message.replace(regexPullRequest, "").match(/\#\d+/g) : [];
-  return ids && ids.length > 0 ? ids[ids.length-1].replace('#', '') : null;
+  if (!message || message.length <= 0) {
+    return null
+  }
+  let ids = message.replace(regexPullRequest, "").match(regexPRNamingFormat1);
+  if (ids && ids.length > 0) {
+    return ids[ids.length-1].replace('#', '')
+  }
+  ids = message.replace(regexPullRequest, "").match(regexPRNamingFormat2);
+  return ids && ids.length > 0 ? ids[ids.length-1] : null;
 }
 
 async function getCardOnBoard(board, message) {
