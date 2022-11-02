@@ -6,6 +6,7 @@ const { context = {} } = github;
 const { pull_request, head_commit } = context.payload;
 
 const regexPullRequest = /Merge pull request \#\d+ from/g;
+const trelloCardIdPattern = core.getInput('trello-card-id-pattern', { required: false }) || '#';
 const trelloApiKey = core.getInput('trello-api-key', { required: true });
 const trelloAuthToken = core.getInput('trello-auth-token', { required: true });
 const trelloBoardId = core.getInput('trello-board-id', { required: true });
@@ -14,17 +15,24 @@ const trelloListNameCommit = core.getInput('trello-list-name-commit', { required
 const trelloListNamePullRequestOpen = core.getInput('trello-list-name-pr-open', { required: false });
 const trelloListNamePullRequestClosed = core.getInput('trello-list-name-pr-closed', { required: false });
 
-function getCardNumber(message) {
+function getCardNumbers(message) {
   console.log(`getCardNumber(${message})`);
-  let ids = message && message.length > 0 ? message.replace(regexPullRequest, "").match(/\#\d+/g) : [];
-  return ids && ids.length > 0 ? ids[ids.length-1].replace('#', '') : null;
+  console.log(`Trello ID match pattern ${trelloCardIdPattern}`)
+  let ids = message && message.length > 0 ? message.replace(regexPullRequest, "").match(new RegExp(`${trelloCardIdPattern}\\d+`, 'g')) : [];
+  return ids && ids.length > 0 ? [...new Set(ids.map((x) => {return x.replace(trelloCardIdPattern, '');}))] : null;
 }
 
-async function getCardOnBoard(board, message) {
-  console.log(`getCardOnBoard(${board}, ${message})`);
-  let card = getCardNumber(message);
+function getAllCardNumbers(message, branch) {
+  cardBranch = getCardNumbers(branch);
+  cardMessage = getCardNumbers(message);
+  return new Set(...cardBranch, ...cardMessage);
+}
+
+async function getCardOnBoard(board, card) {
+  console.log(`getCardOnBoard(${board}, ${card})`);
   if (card && card.length > 0) {
-    let url = `https://trello.com/1/boards/${board}/cards/${card}`
+    let url = `https://trello.com/1/boards/${board}/cards/${card}`;
+    console.log("Url is ", url);
     return await axios.get(url, { 
       params: { 
         key: trelloApiKey, 
@@ -37,6 +45,7 @@ async function getCardOnBoard(board, message) {
       return null;
     });
   }
+
   return null;
 }
 
@@ -111,21 +120,24 @@ async function handleHeadCommit(data) {
   let url = data.url;
   let message = data.message;
   let user = data.author.name;
-  let card = await getCardOnBoard(trelloBoardId, message);
-  if (card && card.length > 0) {
-    if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
-      await addAttachmentToCard(card, url);
+  let cardsNumbers = getCardNumbers(message);
+  cardsNumbers.forEach(async cardNumber => {
+    let card = await getCardOnBoard(trelloBoardId, cardNumber);
+    if (card && card.length > 0) {
+      if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
+        await addAttachmentToCard(card, url);
+      }
+      else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
+        await addCommentToCard(card, user, message, url);
+      }
+      if (message.match(regexPullRequest) && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
+        await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
+      }
+      else if (trelloListNameCommit && trelloListNameCommit.length > 0) {
+        await moveCardToList(trelloBoardId, card, trelloListNameCommit);
+      }
     }
-    else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
-      await addCommentToCard(card, user, message, url);
-    }
-    if (message.match(regexPullRequest) && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
-      await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
-    }
-    else if (trelloListNameCommit && trelloListNameCommit.length > 0) {
-      await moveCardToList(trelloBoardId, card, trelloListNameCommit);
-    }
-  }
+  });
 }
 
 async function handlePullRequest(data) {
@@ -133,21 +145,26 @@ async function handlePullRequest(data) {
   let url = data.html_url || data.url;
   let message = data.title;
   let user = data.user.name;
-  let card = await getCardOnBoard(trelloBoardId, message);
-  if (card && card.length > 0) {
-    if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
-      await addAttachmentToCard(card, url);
+  let branch = data.head.ref;
+  let cardsNumbers = getAllCardNumbers(message, branch);
+  cardsNumbers.forEach(async cardNumber => {
+
+  let card = await getCardOnBoard(trelloBoardId, cardNumber);
+    if (card && card.length > 0) {
+      if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
+        await addAttachmentToCard(card, url);
+      }
+      else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
+        await addCommentToCard(card, user, message, url);
+      }
+      if (data.state == "open" && trelloListNamePullRequestOpen && trelloListNamePullRequestOpen.length > 0) {
+        await moveCardToList(trelloBoardId, card, trelloListNamePullRequestOpen);
+      }
+      else if (data.state == "closed" && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
+        await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
+      }
     }
-    else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
-      await addCommentToCard(card, user, message, url);
-    }
-    if (data.state == "open" && trelloListNamePullRequestOpen && trelloListNamePullRequestOpen.length > 0) {
-      await moveCardToList(trelloBoardId, card, trelloListNamePullRequestOpen);
-    }
-    else if (data.state == "closed" && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
-      await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
-    }
-  }
+  });
 }
 
 async function run() {
