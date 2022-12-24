@@ -1,6 +1,6 @@
-import * as axios from 'axios';
-import * as core from '@actions/core';
-import * as github from '@actions/github';
+const axios = require('axios');
+const core = require('@actions/core');
+const github = require('@actions/github');
 
 const { context = {} } = github;
 const { pull_request, head_commit } = context.payload;
@@ -180,3 +180,5 @@ async function run() {
 };
 
 run()
+
+module.exports = {getCardNumbers}

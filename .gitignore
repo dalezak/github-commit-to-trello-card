@@ -104,3 +104,6 @@ typings/
 
 #VS Code
 *.code-workspace
+
+# Intellij IDE
+.idea
