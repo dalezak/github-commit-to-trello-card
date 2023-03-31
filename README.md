@@ -22,7 +22,7 @@ https://trello.com/c/BeDnNDEH/1767-framework-for-testing-resume-builder
 
 #### GitHub Action
 ```
-name: GitHub Requires Trello Card URL
+name: GitHub PR Description Requires at least one Trello Card URL
 
 on: [pull_request]
 
