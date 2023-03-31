@@ -118,30 +118,30 @@ async function moveCardToList(board, card, list) {
   return null;
 }
 
-async function handleHeadCommit(data) {
-  console.log("handleHeadCommit", data);
-  let url = data.url;
-  let message = data.message;
-  let user = data.author.name;
-  let cardsNumbers = getCardNumbers(message);
-  cardsNumbers.forEach(async cardNumber => {
-    let card = await getCardOnBoard(trelloBoardId, cardNumber);
-    if (card && card.length > 0) {
-      if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
-        await addAttachmentToCard(card, url);
-      }
-      else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
-        await addCommentToCard(card, user, message, url);
-      }
-      if (message.match(regexPullRequest) && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
-        await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
-      }
-      else if (trelloListNameCommit && trelloListNameCommit.length > 0) {
-        await moveCardToList(trelloBoardId, card, trelloListNameCommit);
-      }
-    }
-  });
-}
+// async function handleHeadCommit(data) {
+//   console.log("handleHeadCommit", data);
+//   let url = data.url;
+//   let message = data.message;
+//   let user = data.author.name;
+//   let cardsNumbers = getCardNumbers(message);
+//   cardsNumbers.forEach(async cardNumber => {
+//     let card = await getCardOnBoard(trelloBoardId, cardNumber);
+//     if (card && card.length > 0) {
+//       if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
+//         await addAttachmentToCard(card, url);
+//       }
+//       else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
+//         await addCommentToCard(card, user, message, url);
+//       }
+//       if (message.match(regexPullRequest) && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
+//         await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
+//       }
+//       else if (trelloListNameCommit && trelloListNameCommit.length > 0) {
+//         await moveCardToList(trelloBoardId, card, trelloListNameCommit);
+//       }
+//     }
+//   });
+// }
 
 async function handlePullRequest(data) {
   console.log("handlePullRequest", data);
@@ -171,10 +171,7 @@ async function handlePullRequest(data) {
 }
 
 async function run() {
-  if (head_commit && head_commit.message) {
-    handleHeadCommit(head_commit)
-  }
-  else if (pull_request && pull_request.title) {
+  if (pull_request && pull_request.title) {
     handlePullRequest(pull_request)
   }
 };
