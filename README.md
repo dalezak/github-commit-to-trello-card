@@ -1,8 +1,5 @@
-# GitHub-Commit-To-Trello-Card
-### GitHub Action to attach GitHub commits and pull requests to a Trello card
-
-#### Action Marketplace
-[https://github.com/marketplace/actions/github-commit-to-trello-card](https://github.com/marketplace/actions/github-commit-to-trello-card)
+# GitHub-PR-Requires-Trello-Card
+### GitHub Action to ensure there is a Trello card URL in the PR description
 
 #### Action Variables
 - **trello-api-key** - Trello API key, visit https://trello.com/app-key for key
@@ -15,18 +12,19 @@
 - **trello-card-id-pattern** - Trello Card ID Pattern, default is #{CardNumber}
 
 
-#### Git Commit
+#### Create a PR
 ```
-git add .
-git commit -m "Add this commit to Trello card #123"
-git push
+// ensure there is a link to at least one Trello card ie:
+
+https://trello.com/c/BeDnNDEH/1767-framework-for-testing-resume-builder
+
 ```
 
 #### GitHub Action
 ```
-name: GitHub Commit To Trello Comment
+name: GitHub Requires Trello Card URL
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -35,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: dalezak/github-commit-to-trello-card@main
+      - uses: teal-hq/github-commit-to-trello-card@main
         with:
           trello-api-key: ${{ secrets.TRELLO_KEY }}
           trello-auth-token: ${{ secrets.TRELLO_TOKEN }}
