@@ -1,6 +1,6 @@
-author: Dale Zak, Sarin Regmi, @maxcheremisin
+author: Teal Engineering
 name: github-trello-comments
-description: GitHub Action to attach GitHub commits and pull requests to a Trello card
+description: GitHub Action to ensure at least one Trello card URL in PR description
 branding:
   icon: "check-square"
   color: "gray-dark"
