@@ -1,6 +1,8 @@
 # GitHub-PR-Requires-Trello-Card
 ### GitHub Action to ensure there is a Trello card URL in the PR description
 
+Code mostly taken from [this](https://github.com/marketplace/actions/github-commit-to-trello-card) project.
+
 #### Action Variables
 - **trello-api-key** - Trello API key, visit https://trello.com/app-key for key
 - **trello-auth-token** - Trello auth token, visit https://trello.com/app-key then click generate a token
