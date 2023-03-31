@@ -1,4 +1,4 @@
-# GitHub-PR-Requires-Trello-Card
+# GitHub-PR-Requires-Trello-Card-URL
 ### GitHub Action to ensure there is a Trello card URL in the PR description
 
 Code mostly taken from [this](https://github.com/marketplace/actions/github-commit-to-trello-card) project.
