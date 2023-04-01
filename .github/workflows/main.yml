@@ -1,0 +1,16 @@
+name: GitHub PR Description Requires at least one Trello Card URL
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: teal-hq/github-pr-requires-trello-card@main
+        with:
+          trello-api-key: ${{ secrets.TRELLO_KEY }}
+          trello-auth-token: ${{ secrets.TRELLO_TOKEN }}
+          trello-board-id: ${{ secrets.TRELLO_BOARD }}
+          trello-card-action: "Attachment"
+          trello-list-name-commit: "Doing"
+          trello-list-name-pr-open: "Reviewing"
+          trello-list-name-pr-closed: "Testing"

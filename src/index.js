@@ -120,29 +120,29 @@ async function moveCardToList(board, card, list) {
 
 async function handlePullRequest(data) {
   console.log("handlePullRequest", data);
-  let url = data.html_url || data.url;
-  let message = data.title;
-  let user = data.user.name;
-  let branch = data.head.ref;
-  let cardsNumbers = getAllCardNumbers(message, branch);
-  cardsNumbers.forEach(async cardNumber => {
+  // let url = data.html_url || data.url;
+  // let message = data.title;
+  // let user = data.user.name;
+  // let branch = data.head.ref;
+  // let cardsNumbers = getAllCardNumbers(message, branch);
+  // cardsNumbers.forEach(async cardNumber => {
 
-  let card = await getCardOnBoard(trelloBoardId, cardNumber);
-    if (card && card.length > 0) {
-      if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
-        await addAttachmentToCard(card, url);
-      }
-      else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
-        await addCommentToCard(card, user, message, url);
-      }
-      if (data.state == "open" && trelloListNamePullRequestOpen && trelloListNamePullRequestOpen.length > 0) {
-        await moveCardToList(trelloBoardId, card, trelloListNamePullRequestOpen);
-      }
-      else if (data.state == "closed" && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
-        await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
-      }
-    }
-  });
+  // let card = await getCardOnBoard(trelloBoardId, cardNumber);
+  //   if (card && card.length > 0) {
+  //     if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
+  //       await addAttachmentToCard(card, url);
+  //     }
+  //     else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
+  //       await addCommentToCard(card, user, message, url);
+  //     }
+  //     if (data.state == "open" && trelloListNamePullRequestOpen && trelloListNamePullRequestOpen.length > 0) {
+  //       await moveCardToList(trelloBoardId, card, trelloListNamePullRequestOpen);
+  //     }
+  //     else if (data.state == "closed" && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
+  //       await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
+  //     }
+  //   }
+  // });
 }
 
 async function run() {
